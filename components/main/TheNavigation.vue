@@ -1,4 +1,11 @@
 <script setup>
+defineProps({
+	toggle: {
+		type: Boolean,
+		default: false,
+	},
+})
+
 const { navigation } = useContent()
 
 const route = useRoute()
@@ -19,7 +26,7 @@ const isActiveLink = (link) => {
 </script>
 
 <template>
-	<Flex :class="$style.wrapper">
+	<Flex :class="[$style.wrapper, toggle && $style.force_show]">
 		<Flex direction="column" gap="24" :class="$style.container">
 			<Flex direction="column" gap="4" :class="$style.links">
 				<NuxtLink v-for="link in highLevelLinks" :to="link._path" :class="[$style.link, isActiveLink(link) && $style.active]">
@@ -54,11 +61,13 @@ const isActiveLink = (link) => {
 .wrapper {
 	position: sticky;
 	top: 56px;
-	height: 100%;
+	height: calc(100vh - 56px);
+
+	z-index: 1000;
 }
 
 .container {
-	width: 260px;
+	width: 220px;
 
 	border-right: 2px solid var(--op-5);
 
@@ -84,6 +93,31 @@ const isActiveLink = (link) => {
 
 	&.active {
 		background: var(--op-5);
+	}
+}
+
+@media (max-width: 800px) {
+	.wrapper {
+		display: none;
+	}
+
+	.wrapper.force_show {
+		display: flex;
+
+		position: fixed;
+		top: 64px;
+		left: 0;
+		right: 0;
+
+		min-width: initial;
+
+		& .container {
+			background: var(--app-background);
+		}
+	}
+
+	.container {
+		padding: 24px;
 	}
 }
 </style>

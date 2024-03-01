@@ -49,7 +49,7 @@ const show = ref(true)
 	margin-left: -8px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1600px) {
 	.wrapper {
 		position: initial;
 		height: initial;
