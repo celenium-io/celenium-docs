@@ -2,10 +2,41 @@
 /** Components */
 import Search from "./Search.vue"
 
+/** Store */
+import { useAppStore } from "@/store/app"
+const appStore = useAppStore()
+
 const emit = defineEmits(["toggleNavigation"])
 defineProps({
 	showNavigation: Boolean,
 })
+
+let root
+
+onMounted(() => {
+	root = document.querySelector("html")
+
+	if (!localStorage.theme) {
+		localStorage.theme = "dark"
+	}
+
+	switch (localStorage.theme) {
+		case "dark":
+		case "dimmed":
+		case "light":
+			appStore.theme = localStorage.theme
+			root.setAttribute("theme", appStore.theme)
+
+			break
+	}
+})
+
+const toggleTheme = () => {
+	const target = appStore.theme === "dark" ? "light" : "dark"
+	root.setAttribute("theme", target)
+	appStore.theme = target
+	localStorage.theme = target
+}
 </script>
 
 <template>
@@ -29,7 +60,17 @@ defineProps({
 				</Flex>
 			</Flex>
 
-			<Search />
+			<Flex align="center" gap="8">
+				<Search />
+
+				<Icon
+					@click="toggleTheme"
+					:name="appStore.theme === 'dark' ? 'sun' : 'moon'"
+					size="16"
+					color="primary"
+					:class="$style.theme_btn"
+				/>
+			</Flex>
 		</Flex>
 	</Flex>
 </template>
@@ -71,6 +112,32 @@ defineProps({
 
 .menu_icon:hover {
 	background: var(--op-10);
+}
+
+.theme_btn {
+	height: 32px;
+	box-sizing: content-box;
+
+	border-radius: 8px;
+	background: var(--op-5);
+	box-shadow: inset 0 0 0 1px var(--op-5);
+	cursor: pointer;
+
+	padding: 0 8px;
+
+	transition: all 0.2s ease;
+
+	&:hover {
+		box-shadow: inset 0 0 0 1px var(--op-8);
+	}
+
+	&.active {
+		box-shadow: inset 0 0 0 1px var(--op-15);
+	}
+
+	&.active:hover {
+		box-shadow: inset 0 0 0 1px var(--op-10);
+	}
 }
 
 @media (max-width: 800px) {
