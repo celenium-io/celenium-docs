@@ -33,6 +33,8 @@ const showNavigation = ref(false)
 </template>
 
 <style module>
+@import url("katex/dist/katex.min.css");
+
 .wrapper {
 	position: relative;
 

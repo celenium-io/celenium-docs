@@ -1,89 +1,52 @@
 <script setup>
-/**
- * Services
- */
-import { nodeToText } from "@/utils/search"
-
 definePageMeta({
 	layout: "default",
 })
 
 const route = useRoute()
 
-const { next, prev, page } = useContent()
+const { data } = await useAsyncData(route.path, () => queryCollection("content").path(route.path).first())
+const { data: surround } = await useAsyncData("surround", () => {
+	return queryCollectionItemSurroundings("content", route.path)
+})
 
-const description = nodeToText(page.value?.body.children.find((node) => node.tag === "p") || "")
+useSeoMeta({
+	title: data.value.seo.title,
+	description: data.value.seo.description,
 
-useHead({
-	link: [
-		{
-			rel: "canonical",
-			href: `https://docs.celenium.io${route.path}`,
-		},
-	],
-	meta: [
-		{
-			name: "description",
-			content: description,
-		},
-		{
-			property: "og:title",
-			content: `${page.value?.title} - Celenium Docs`,
-		},
-		{
-			property: "og:description",
-			content: description,
-		},
-		{
-			property: "og:url",
-			content: `https://docs.celenium.io${route.path}`,
-		},
-		{
-			property: "og:image",
-			content: `https://docs.celenium.io${route.path}/__og_image__/og.png`,
-		},
-		{
-			name: "twitter:title",
-			content: `${page.value?.title} - Celenium Docs`,
-		},
-		{
-			name: "twitter:description",
-			content: description,
-		},
-		{
-			name: "twitter:card",
-			content: "summary_large_image",
-		},
-	],
+	ogTitle: data.value.seo.title,
+	ogDescription: data.value.seo.description,
+	ogImage: `https://docs.celenium.io${route.path}/__og_image__/og.png`,
+	twitterCard: "summary_large_image",
 })
 </script>
 
 <template>
 	<Flex direction="column" gap="24" :class="$style.wrapper">
-		<ContentDoc>
+		<ContentRenderer :value="data">
 			<template #not-found>
 				<Text size="14" weight="500" color="tertiary">
 					It looks like we don't have a <Text color="secondary">{{ route.path }}</Text> page. Check the path or use the search.
 				</Text>
 			</template>
-		</ContentDoc>
+		</ContentRenderer>
 
 		<Flex align="center" gap="16" :class="$style.nav_btns">
-			<NuxtLink v-if="prev" :to="prev._path" :class="$style.nav_btn">
+			<NuxtLink v-if="surround[0]" :to="surround[0].path" :class="$style.nav_btn">
 				<Flex align="center" justify="between">
 					<Icon name="arrow-circle-broken-right" size="16" color="tertiary" :style="{ transform: `rotate(180deg)` }" />
 
 					<Flex direction="column" align="end" gap="8">
 						<Text size="13" weight="500" color="tertiary">Previous</Text>
-						<Text size="14" weight="600" color="primary">{{ prev.name }}</Text>
+						<Text size="14" weight="600" color="primary">{{ surround[0].title }}</Text>
 					</Flex>
 				</Flex>
 			</NuxtLink>
-			<NuxtLink v-if="next" :to="next._path" :class="$style.nav_btn">
+			<NuxtLink v-if="surround[1]" :to="surround[1].path" :class="$style.nav_btn">
 				<Flex align="center" justify="between">
 					<Flex direction="column" gap="8">
 						<Text size="13" weight="500" color="tertiary">Next</Text>
-						<Text size="14" weight="600" color="primary">{{ next.name }}</Text>
+						<Text size="14" weight="600" color="primary">{{ surround[1].title }}</Text>
 					</Flex>
 
 					<Icon name="arrow-circle-broken-right" size="16" color="tertiary" />
@@ -128,6 +91,10 @@ h4 {
 	color: var(--txt-secondary);
 
 	margin-bottom: 12px;
+}
+
+.wrapper g {
+	fill: var(--txt-primary);
 }
 
 .nav_btns {

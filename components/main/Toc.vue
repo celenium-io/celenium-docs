@@ -4,19 +4,28 @@
  */
 import TocLinks from "./TocLinks.vue"
 
-const { toc } = useContent()
+const route = useRoute()
+
+const { data, refresh } = await useAsyncData(`${route.path}-toc`, () => queryCollection("content").path(route.path).first())
+
+watch(
+	() => route.path,
+	() => {
+		refresh()
+	},
+)
 
 const show = ref(true)
 </script>
 
 <template>
-	<Flex v-if="toc" direction="column" gap="12" :class="$style.wrapper">
-		<Flex v-if="toc.links.length" align="center" gap="8" :class="$style.header">
+	<Flex v-if="data.body.toc.links.length" direction="column" gap="12" :class="$style.wrapper">
+		<Flex align="center" gap="8" :class="$style.header">
 			<Text @click="show = !show" size="13" weight="600" color="tertiary">On this page</Text>
 			<Icon name="chevron-down" size="12" color="secondary" :style="{ transform: `rotate(${show ? '180' : '0'}deg)` }" />
 		</Flex>
 
-		<TocLinks v-if="show" :links="toc.links" :class="$style.links" />
+		<TocLinks v-if="show" :links="data.body.toc.links" :class="$style.links" />
 	</Flex>
 </template>
 

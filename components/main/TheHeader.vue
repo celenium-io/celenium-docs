@@ -61,7 +61,7 @@ const toggleTheme = () => {
 			</Flex>
 
 			<Flex align="center" gap="8">
-				<Search />
+				<!-- <Search /> -->
 
 				<Icon
 					@click="toggleTheme"

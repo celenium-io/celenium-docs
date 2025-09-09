@@ -45,6 +45,16 @@ export default defineNuxtConfig({
 	css: ["@/assets/styles/base.scss", "@/assets/styles/flex.scss", "@/assets/styles/text.scss"],
 
 	content: {
+		build: {
+			markdown: {
+				remarkPlugins: {
+					"remark-math": {},
+				},
+				rehypePlugins: {
+					"rehype-mathjax": {},
+				},
+			},
+		},
 		documentDriven: true,
 		navigation: {
 			fields: ["icon", "name"],
