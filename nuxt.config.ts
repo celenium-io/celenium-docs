@@ -45,6 +45,10 @@ export default defineNuxtConfig({
 	css: ["@/assets/styles/base.scss", "@/assets/styles/flex.scss", "@/assets/styles/text.scss"],
 
 	content: {
+		database: {
+			type: "d1",
+			bindingName: "DB",
+		},
 		build: {
 			markdown: {
 				remarkPlugins: {
