@@ -6,13 +6,6 @@ icon: "flag"
 
 # Welcome to Celenium
 
-Lift($$L$$) can be determined by Lift Coefficient ($$C_L$$) like the following
-equation.
-
-$$
-L = \frac{1}{2} \rho v^2 S C_L
-$$
-
 Welcome to Celenium, the premier blockchain explorer dedicated to the [Celestia](https://celestia.org) Network. This platform serves as an essential tool for developers, providing a comprehensive suite of functionalities designed to enhance your experience with the Celestia blockchain. Our mission is to deliver an intuitive and robust explorer that not only meets but exceeds the needs of our community.
 
 Whether you are new to Celestia or a seasoned developer, Celenium offers a wealth of information and functionality to assist you. Our documentation is structured to provide a seamless navigation experience, ensuring you find the answers and guidance you need efficiently.
