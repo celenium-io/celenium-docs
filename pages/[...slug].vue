@@ -93,6 +93,14 @@ h4 {
 	margin-bottom: 12px;
 }
 
+.wrapper code {
+	border-radius: 12px;
+	background: rgba(0, 0, 0, 25%);
+	box-shadow: inset 0 0 0 1px var(--op-5);
+
+	padding: 12px;
+}
+
 .wrapper g {
 	fill: var(--txt-primary);
 }
